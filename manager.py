@@ -1,8 +1,8 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 
-from supervised_learner import SupervisedLearner
-from baseline_learner import BaselineLearner
-from matrix import Matrix
+from toolkitPython.supervised_learner import SupervisedLearner
+from toolkitPython.baseline_learner import BaselineLearner
+from toolkitPython.matrix import Matrix
 import random
 import argparse
 import time
