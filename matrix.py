@@ -1,7 +1,8 @@
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, unicode_literals)
 
 import random
 import numpy as np
+import cloudstorage as gcs
 
 def mode(a, axis=0):
 # taken from scipy code
@@ -89,7 +90,7 @@ class Matrix:
 
         rows = []           # we read data into array of rows, then convert into array of columns
 
-        f = open(filename)
+        f = gcs.open(filename)
         for line in f.readlines():
             line = line.rstrip().upper()
             if len(line) > 0 and line[0] != '%':
@@ -254,18 +255,20 @@ class Matrix:
                     if v != self.MISSING:
                         self.set(j, i, (v - min_val)/(max_val - min_val))
 
-    def print(self):
-        print("@RELATION {}".format(self.dataset_name))
+    def display(self):
+        restext=[]
+        restext.append("@RELATION {}".format(self.dataset_name))
         for i in range(len(self.attr_names)):
-            print("@ATTRIBUTE {}".format(self.attr_names[i]), end="")
+            restext.append("@ATTRIBUTE {}".format(self.attr_names[i]), end="")
             if self.value_count(i) == 0:
-                print(" CONTINUOUS")
+                restext.append(" CONTINUOUS")
             else:
-                print(" {{{}}}".format(", ".join(self.enum_to_str[i].values())))
+                restext.append(" {{{}}}".format(", ".join(self.enum_to_str[i].values())))
 
-        print("@DATA")
+        restext.append("@DATA")
         for i in range(self.rows):
             r = self.row(i)
             values = list(map(lambda j: str(r[j]) if self.value_count(j) == 0 else self.enum_to_str[j][r[j]],
                               range(len(r))))
-            print("{}".format(", ".join(values)))
+            restext.append("{}".format(", ".join(values)))
+        return "\n".join(restext)
