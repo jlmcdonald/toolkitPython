@@ -91,7 +91,7 @@ class Matrix:
         rows = []           # we read data into array of rows, then convert into array of columns
 
         f = gcs.open(filename)
-        for line in f.readlines():
+        for line in tuple(f):
             line = line.rstrip().upper()
             if len(line) > 0 and line[0] != '%':
                 if not reading_data:
@@ -259,7 +259,7 @@ class Matrix:
         restext=[]
         restext.append("@RELATION {}".format(self.dataset_name))
         for i in range(len(self.attr_names)):
-            restext.append("@ATTRIBUTE {}".format(self.attr_names[i]), end="")
+            restext.append("@ATTRIBUTE {}".format(self.attr_names[i]))
             if self.value_count(i) == 0:
                 restext.append(" CONTINUOUS")
             else:

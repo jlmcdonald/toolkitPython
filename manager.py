@@ -3,36 +3,24 @@ from __future__ import (absolute_import, division, unicode_literals)
 from toolkitPython.supervised_learner import SupervisedLearner
 from toolkitPython.baseline_learner import BaselineLearner
 from toolkitPython.matrix import Matrix
-import random
-import argparse
-import time
-
+import random, time
 
 class MLSystemManager:
 
     def get_learner(self, model):
-        """
-        :type model: str
-        :rtype: SupervisedLearner
-        """
-
-        # When you make a new learning algorithm, you should add al ine for it to this method.
-
-        if model == "baseline":
-            return BaselineLearner()
-        # elif model == "perceptron":
-        #     return Perceptron()
-        # elif model == "neuralnet":
-        #     return NeuralNet()
-        # elif model == "decisiontree":
-        #     return DecisionTree()
-        # elif model == "knn"
-        #     return InstanceBasedLearner()
+        modelmap = {
+          "baseline": BaselineLearner(),
+          #"perceptron": PerceptronLearner(),
+          #"neuralnet": NeuralNetLearner(),
+          #"decisiontree": DecisionTreeLearner(),
+          #"knn": InstanceBasedLearner()
+        }
+        if model in modelmap:
+            return modelmap[model]
         else:
             raise Exception("Unrecognized model: {}".format(model))
 
-    def main(self, args=None):
-        # parse the command-line arguments
+    def main(self, args):
         file_name = args["arff"]
         learner_name = args["L"]
         eval_method = args["E"][0]
@@ -111,10 +99,8 @@ class MLSystemManager:
             if print_confusion_matrix:
                 restext.append("\nConfusion matrix: (Row=target value, Col=predicted value")
                 restext.append(confusion.display())
-                restext.append("")
 
         elif eval_method == "random":
-
             restext.append("Calculating accuracy on a random hold-out set...")
             train_percent = float(eval_parameter)
             if train_percent < 0 or train_percent > 1:
@@ -189,4 +175,5 @@ class MLSystemManager:
         else:
             raise Exception("Unrecognized evaluation method '{}'".format(eval_method))
             
-        return "\n".join(restext)
+        concatenated = "\n".join(restext)
+        return concatenated.replace("\n","<br/>")
