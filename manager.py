@@ -49,11 +49,9 @@ class MLSystemManager:
         # load the ARFF file
         data = Matrix()
         data.load_arff(file_name)
-        print(data.data[0])
         if normalize:
             print("Using normalized data")
             data.normalize()
-            print(data.data[0])
 
         # print some stats
         print("\nDataset name: {}\n"
@@ -66,15 +64,13 @@ class MLSystemManager:
 
             print("Calculating accuracy on training set...")
 
-            features = Matrix(data, 0, 0, data.rows, data.cols)
+            features = Matrix(data, 0, 0, data.rows, data.cols-1)
             labels = Matrix(data, 0, data.cols-1, data.rows, 1)
             confusion = Matrix()
-
             start_time = time.time()
             learner.train(features, labels)
             elapsed_time = time.time() - start_time
             print("Time to train (in seconds): {}".format(elapsed_time))
-
             accuracy = learner.measure_accuracy(features, labels, confusion)
             print("Training set accuracy: " + str(accuracy))
 

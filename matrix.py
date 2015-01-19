@@ -98,7 +98,6 @@ class Matrix:
                         self.dataset_name = line[9:].strip()
                     elif line.startswith("@ATTRIBUTE"):
                         attr_def = line[10:].strip()
-                        print ("yo"+attr_def)
                         if attr_def[0] == "'":
                             attr_def = attr_def[1:]
                             attr_name = attr_def[:attr_def.index("'")]
