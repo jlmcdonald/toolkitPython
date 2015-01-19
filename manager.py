@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function, unicode_liter
 
 from supervised_learner import SupervisedLearner
 from baseline_learner import BaselineLearner
+from perceptron_learner import PerceptronLearner
 from matrix import Matrix
 import random
 import argparse
@@ -20,8 +21,8 @@ class MLSystemManager:
 
         if model == "baseline":
             return BaselineLearner()
-        # elif model == "perceptron":
-        #     return Perceptron()
+        elif model == "perceptron":
+             return PerceptronLearner()
         # elif model == "neuralnet":
         #     return NeuralNet()
         # elif model == "decisiontree":
@@ -48,9 +49,11 @@ class MLSystemManager:
         # load the ARFF file
         data = Matrix()
         data.load_arff(file_name)
+        print(data.data[0])
         if normalize:
             print("Using normalized data")
             data.normalize()
+            print(data.data[0])
 
         # print some stats
         print("\nDataset name: {}\n"
