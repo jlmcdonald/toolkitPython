@@ -206,20 +206,12 @@ class Matrix:
 
     def shuffle(self, buddy=None):
         """Shuffle the row order. If a buddy Matrix is provided, it will be shuffled in the same order."""
-        n = self.rows
-        for i in range(n):
-            r = random.randrange(n)
-            cur_row = self.row(i)
-            rnd_row = self.row(r)
-            buddy_cur_row = buddy.row(i) if buddy is not None else None
-            buddy_rnd_row = buddy.row(r) if buddy is not None else None
-            for row in range(self.rows):
-                self.set(i, row, rnd_row[row])
-                self.set(r, row, cur_row[row])
-
-                if buddy is not None:
-                    buddy.set(i, row, buddy_rnd_row[row])
-                    buddy.set(i, row, buddy_cur_row[row])
+        if not buddy:
+          random.shuffle(self.data)
+        else:
+          c = list(zip(self.data, buddy.data))
+          random.shuffle(c)
+          self.data, buddy.data = zip(*c)
 
     def column_mean(self, col):
         """Get the mean of the specified column"""

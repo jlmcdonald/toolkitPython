@@ -3,15 +3,17 @@ from supervised_learner import SupervisedLearner
 import random
 
 class PerceptronLearner(SupervisedLearner):
-    inputs, weights = [],[]
+    traininginputs, testinputs, weights = [],[],[]
     trainingepoch,unprogressiveEpochs,epochLimit = 0,0,100
     learningrate=.1
     currentAccuracy=0.0
+    reserve_training=True
+ 
 
     def train(self, featurematrix, targetmatrix, initialized=False):
       if not initialized:
         self.initInputs(featurematrix,targetmatrix)
-      for idx,vector in enumerate(self.inputs):
+      for idx,vector in enumerate(self.traininginputs):
         output=self.checkVector(vector)
         if output!=int(targetmatrix.data[idx][0]):
           self.changeWeights(targetmatrix.data[idx][0],output,vector)
@@ -21,6 +23,8 @@ class PerceptronLearner(SupervisedLearner):
         self.unprogressiveEpochs=0 if accuracy>self.currentAccuracy else self.unprogressiveEpochs+1
         self.currentAccuracy=accuracy
         self.train(featurematrix,targetmatrix,initialized=True)
+      else:
+        print("Total epochs run: "+str(self.trainingepoch))
 
     def predict(self, features, targets):
       targets += [self.checkVector(features)]
@@ -30,8 +34,11 @@ class PerceptronLearner(SupervisedLearner):
       return inputvector
       
     def initInputs(self,featurematrix,targetmatrix):
-      self.inputs=[self.addBias(inputvector) for inputvector in featurematrix.data]
-      self.weights=[round(random.uniform(-1,1),1) for val in self.inputs[0]]
+      featurematrix.shuffle(targetmatrix)
+      delimiter=int(len(featurematrix.data)*.7)
+      self.traininginputs=[self.addBias(inputvector) for inputvector in featurematrix.data[:delimiter]]
+      self.testinputs=[self.addBias(inputvector) for inputvector in featurematrix.data[delimiter:]]
+      self.weights=[round(random.uniform(-1,1),1) for val in self.traininginputs[0]]
 
     def changeWeights(self,target,output,inputvector):
       change=[self.learningrate*(int(target)-output)*inputvector[idx] for idx in range(len(self.weights))]
