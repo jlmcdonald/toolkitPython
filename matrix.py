@@ -145,10 +145,6 @@ class Matrix:
                     rows += [row]
 
         f.close()
-
-        # store as array of columns
-        #for i in range(len(self.attr_names)):
-        #    self.data.append([row[i] for row in rows])
         self.data=rows
 
     @property
