@@ -31,7 +31,7 @@ class MLSystemManager:
         random.seed(args["seed"]) # Use a seed for deterministic results, if provided (makes debugging easier)
 
         restext=[]
-        
+
         # load the model
         learner = self.get_learner(learner_name)
 
@@ -53,7 +53,7 @@ class MLSystemManager:
 
             restext.append("Calculating accuracy on training set...")
 
-            features = Matrix(data, 0, 0, data.rows, data.cols)
+            features = Matrix(data, 0, 0, data.rows, data.cols-1)
             labels = Matrix(data, 0, data.cols-1, data.rows, 1)
             confusion = Matrix()
 
@@ -175,6 +175,6 @@ class MLSystemManager:
 
         else:
             raise Exception("Unrecognized evaluation method '{}'".format(eval_method))
-            
+
         concatenated = "\n".join(restext)
         return concatenated.replace("\n","<br/>")
