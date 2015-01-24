@@ -252,7 +252,7 @@ class Matrix:
             else:
                 restext.append(" {{{}}}".format(", ".join(self.enum_to_str[i].values())))
 
-        print("@DATA")
+        restext.append("@DATA")
         for i in range(self.cols):
             r = self.col(i)
             values = list(map(lambda j: str(r[j]) if self.value_count(j) == 0 else self.enum_to_str[j][r[j]],
