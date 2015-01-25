@@ -132,7 +132,6 @@ class Matrix:
                     # reading data
                     row = []
                     val_idx = 0
-                    # print("{}".format(line))
                     vals = line.split(",")
                     for val in vals:
                         val = val.strip()
@@ -243,8 +242,9 @@ class Matrix:
                     if v != self.MISSING:
                         self.set(j, i, (v - min_val)/(max_val - min_val))
 
-    def print(self):
-        print("@RELATION {}".format(self.dataset_name))
+    def display(self):
+        restext=[]
+        restext.append("@RELATION {}".format(self.dataset_name))
         for i in range(len(self.attr_names)):
             restext.append("@ATTRIBUTE {}".format(self.attr_names[i]))
             if self.value_count(i) == 0:

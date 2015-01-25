@@ -10,11 +10,7 @@ class MLSystemManager:
 
     def get_learner(self, model):
         modelmap = {
-          "baseline": BaselineLearner(),
-          "perceptron": PerceptronLearner(),
-          #"neuralnet": NeuralNetLearner(),
-          #"decisiontree": DecisionTreeLearner(),
-          #"knn": InstanceBasedLearner()
+          "baseline": BaselineLearner()
         }
         if model in modelmap:
             return modelmap[model]
@@ -176,5 +172,6 @@ class MLSystemManager:
         else:
             raise Exception("Unrecognized evaluation method '{}'".format(eval_method))
 
+        restext.append("Total Epochs: "+str(learner.trainingepoch))
         concatenated = "\n".join(restext)
         return concatenated.replace("\n","<br/>")
