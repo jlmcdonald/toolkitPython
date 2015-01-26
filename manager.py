@@ -2,7 +2,6 @@ from __future__ import (absolute_import, division, unicode_literals)
 
 from toolkitPython.supervised_learner import SupervisedLearner
 from toolkitPython.baseline_learner import BaselineLearner
-from toolkitPython.learning_models import PerceptronLearner
 from toolkitPython.matrix import Matrix
 import random, time
 
