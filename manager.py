@@ -173,4 +173,7 @@ class MLSystemManager:
 
         restext.append("Total Epochs: "+str(learner.trainingepoch))
         concatenated = "\n".join(restext)
-        return concatenated.replace("\n","<br/>")
+        if args['weights_only']:
+          return learner.weights
+        else:
+          return concatenated.replace("\n","<br/>")
