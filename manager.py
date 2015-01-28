@@ -6,6 +6,8 @@ from toolkitPython.matrix import Matrix
 import random, time
 
 class MLSystemManager:
+    train_accuracy=0
+    test_accuracy=0
 
     def get_learner(self, model):
         modelmap = {
@@ -57,8 +59,8 @@ class MLSystemManager:
             elapsed_time = time.time() - start_time
             restext.append("Time to train (in seconds): {}".format(elapsed_time))
 
-            accuracy = learner.measure_accuracy(features, labels, confusion)
-            restext.append("Training set accuracy: " + str(accuracy))
+            self.train_accuracy = learner.measure_accuracy(features, labels, confusion)
+            restext.append("Training set accuracy: " + str(self.train_accuracy))
 
             if print_confusion_matrix:
                 restext.append("\nConfusion matrix: (Row=target value, Col=predicted value")
@@ -83,14 +85,14 @@ class MLSystemManager:
             elapsed_time = time.time() - start_time
             restext.append("Time to train (in seconds): {}".format(elapsed_time))
 
-            train_accuracy = learner.measure_accuracy(features, labels)
-            restext.append("Training set accuracy: {}".format(train_accuracy))
+            self.train_accuracy = learner.measure_accuracy(features, labels)
+            restext.append("Training set accuracy: {}".format(self.train_accuracy))
 
             test_features = Matrix(test_data, 0, 0, test_data.rows, test_data.cols-1)
             test_labels = Matrix(test_data, 0, test_data.cols-1, test_data.rows, 1)
             confusion = Matrix()
-            test_accuracy = learner.measure_accuracy(test_features, test_labels, confusion)
-            restext.append("Test set accuracy: {}".format(test_accuracy))
+            self.test_accuracy = learner.measure_accuracy(test_features, test_labels, confusion)
+            restext.append("Test set accuracy: {}".format(self.test_accuracy))
 
             if print_confusion_matrix:
                 restext.append("\nConfusion matrix: (Row=target value, Col=predicted value")
@@ -118,12 +120,12 @@ class MLSystemManager:
             elapsed_time = time.time() - start_time
             restext.append("Time to train (in seconds): {}".format(elapsed_time))
 
-            train_accuracy = learner.measure_accuracy(train_features, train_labels)
-            restext.append("Training set accuracy: {}".format(train_accuracy))
+            self.train_accuracy = learner.measure_accuracy(train_features, train_labels)
+            restext.append("Training set accuracy: {}".format(self.train_accuracy))
 
             confusion = Matrix()
-            test_accuracy = learner.measure_accuracy(test_features, test_labels, confusion)
-            restext.append("Test set accuracy: {}".format(test_accuracy))
+            self.test_accuracy = learner.measure_accuracy(test_features, test_labels, confusion)
+            restext.append("Test set accuracy: {}".format(self.test_accuracy))
 
             if print_confusion_matrix:
                 restext.append("\nConfusion matrix: (Row=target value, Col=predicted value")
@@ -139,7 +141,6 @@ class MLSystemManager:
                 raise Exception("Number of folds must be greater than 0")
             restext.append("Number of folds: {}".format(folds))
             reps = 1
-            sum_accuracy = 0.0
             elapsed_time = 0.0
             for j in range(reps):
                 data.shuffle()
@@ -161,12 +162,12 @@ class MLSystemManager:
                     elapsed_time += time.time() - start_time
 
                     accuracy = learner.measure_accuracy(test_features, test_labels)
-                    sum_accuracy += accuracy
+                    self.train_accuracy += accuracy
                     restext.append("Rep={}, Fold={}, Accuracy={}".format(j, i, accuracy))
 
             elapsed_time /= (reps * folds)
             restext.append("Average time to train (in seconds): {}".format(elapsed_time))
-            restext.append("Mean accuracy={}".format(sum_accuracy / (reps * folds)))
+            restext.append("Mean accuracy={}".format(self.train_accuracy / (reps * folds)))
 
         else:
             raise Exception("Unrecognized evaluation method '{}'".format(eval_method))
@@ -175,5 +176,14 @@ class MLSystemManager:
         concatenated = "\n".join(restext)
         if args['weights_only']:
           return {"weights":learner.weights,"attrs":learner.attrs}
+        elif args['format']=="json":
+          return {
+            "weights":learner.weights,
+            "attrs":learner.attrs,
+            "epochs":learner.trainingepoch,
+            "misclassifications":learner.misclassifications,
+            "training":self.train_accuracy,
+            "test":self.test_accuracy
+          }
         else:
           return concatenated.replace("\n","<br/>")
