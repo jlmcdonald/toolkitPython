@@ -131,15 +131,15 @@ class Matrix:
                     # reading data
                     row = []
                     val_idx = 0
-                    # print("{}".format(line))
+                    #print("{}".format(line))
                     vals = line.split(",")
                     for val in vals:
                         val = val.strip()
                         if not val:
                             raise Exception("Missing data element in row with data '{}'".format(line))
                         else:
-                            row += [float(self.MISSING if val == "?" else self.str_to_enum[val_idx].get(val, val))]
-
+        	            row += [float(self.MISSING if val == "?" else self.str_to_enum[val_idx].get(val, val))]
+	
                         val_idx += 1
 
                     rows += [row]

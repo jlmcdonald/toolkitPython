@@ -1,12 +1,9 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 
-from supervised_learner import SupervisedLearner
-from baseline_learner import BaselineLearner
-from perceptron_learner import PerceptronLearner
-from matrix import Matrix
-import random
-import argparse
-import time
+from .supervised_learner import SupervisedLearner
+from .baseline_learner import BaselineLearner
+from .matrix import Matrix
+import random,argparse,time
 
 
 class MLSystemManager:
@@ -21,14 +18,6 @@ class MLSystemManager:
 
         if model == "baseline":
             return BaselineLearner()
-        elif model == "perceptron":
-             return PerceptronLearner()
-        # elif model == "neuralnet":
-        #     return NeuralNet()
-        # elif model == "decisiontree":
-        #     return DecisionTree()
-        # elif model == "knn"
-        #     return InstanceBasedLearner()
         else:
             raise Exception("Unrecognized model: {}".format(model))
 
